@@ -443,6 +443,41 @@
   }
   @keyframes float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
 
+  /* ── FIXED SCROLLING SERVICE AREA BOX ── */
+.service-area-box {
+  background: #050505;
+  border: 1px solid #222;
+  border-radius: 12px;
+  max-height: 500px;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 30px;
+  box-shadow: inset 0 10px 30px rgba(0,0,0,0.5);
+}
+.service-area-box::-webkit-scrollbar { width: 10px; }
+.service-area-box::-webkit-scrollbar-track { background: #111; }
+.service-area-box::-webkit-scrollbar-thumb { background: #444; border-radius: 5px; }
+.service-area-box::-webkit-scrollbar-thumb:hover { background: var(--brand); }
+
+.area-col { padding: 30px; }
+.area-col.left-col { border-right: 1px solid #222; }
+.area-col h3 { font-family: 'Rajdhani', sans-serif; font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 20px; }
+
+.area-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.area-list li a {
+  display: block; color: #bbb; text-decoration: none; font-size: 15px; padding: 10px 14px;
+  background: rgba(255,255,255,0.03); border-radius: 6px; transition: all 0.2s; cursor: pointer;
+}
+.area-list li a:hover {
+  background: rgba(232,0,13,0.15); color: #fff; transform: translateX(4px); border-left: 3px solid var(--brand);
+}
+
+@media (max-width: 768px) {
+  .service-area-box { grid-template-columns: 1fr; max-height: 600px; }
+  .area-col.left-col { border-right: none; border-bottom: 1px solid #222; }
+}
+
   /* ── RESPONSIVE ── */
   @media (max-width: 768px) {
     .top-bar { padding: 8px 20px; font-size: 12px; }
@@ -482,6 +517,8 @@
   </div>
   <div class="nav-links">
     <button class="nav-btn active" onclick="showPage('home')" id="nav-home">🏠 Home</button>
+
+    <button class="nav-btn" id="nav-areas" onclick="showPage('home'); setTimeout(() => document.querySelector('.service-area-box').scrollIntoView({behavior: 'smooth', block: 'center'}), 100);">📍 Service Areas</button>
 
     <div class="dropdown">
       <button class="nav-btn" id="nav-services" onclick="showPage('services')">
@@ -590,6 +627,26 @@
       </div>
     </div>
   </section>
+
+  
+
+  <section style="background: var(--dark);">
+  <div class="section-title">Our <span class="accent">Service Area</span></div>
+  <div class="divider"></div>
+  
+  <div class="service-area-box">
+    <div class="area-col left-col">
+      <h3>📍 Telangana Cities</h3>
+      <ul class="area-list ts-list-container">
+        </ul>
+    </div>
+    <div class="area-col">
+      <h3>📍 Andhra Pradesh Cities</h3>
+      <ul class="area-list ap-list-container">
+        </ul>
+    </div>
+  </div>
+</section>
 
   <!-- WHY US -->
   <section>
@@ -768,6 +825,61 @@
   </section>
 </div>
 
+<div class="page" id="page-location">
+  <div class="service-hero">
+    <h1 id="dyn-loc-title">Brand in <span class="accent">City</span></h1>
+    <p>Exclusive local offers and 4-hour installation available in your area.</p>
+  </div>
+
+  <div class="location-layout">
+    <div>
+      <div class="section-title">Selected <span class="accent">Plan</span></div>
+      <div class="divider"></div>
+      
+      <div id="card-airtel" class="plan-card" style="display:none; border-color: var(--airtel);">
+        <span class="plan-badge" style="background: var(--airtel);">Airtel DTH</span>
+        <h3 id="dyn-airtel-title">Airtel HD in City</h3>
+        <div class="price">₹1,900 <small>+ pack</small></div>
+        <p style="color: var(--muted); line-height: 1.6;">Get the latest Airtel Xstream HD Set Top Box. Includes standard installation and 1-month Free to Air channels.</p>
+        <div class="plan-cta">
+          <a href="tel:7780647302" style="background: var(--airtel);">📞 Call Agent</a>
+          <a href="https://api.whatsapp.com/send?phone=+917780647302" class="wa-btn">💬 WhatsApp</a>
+        </div>
+      </div>
+
+      <div id="card-tata" class="plan-card" style="display:none; border-color: var(--tata);">
+        <span class="plan-badge" style="background: var(--tata);">Tata Play</span>
+        <h3 id="dyn-tata-title">Tata Play HD in City</h3>
+        <div class="price">₹1,900 <small>+ pack</small></div>
+        <p style="color: var(--muted); line-height: 1.6;">India's premium DTH service. Includes HD Box, fast local installation, and 1-month Hindi Basic HD pack.</p>
+        <div class="plan-cta">
+          <a href="tel:7780647302" style="background: var(--tata);">📞 Call Agent</a>
+          <a href="https://api.whatsapp.com/send?phone=+917780647302" class="wa-btn">💬 WhatsApp</a>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="contact-form-box">
+        <h3 style="font-family: 'Rajdhani'; font-size: 24px; margin-bottom: 20px;">Book Installation</h3>
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="loc-name" placeholder="Your name">
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="loc-phone" placeholder="+91 00000 00000">
+        </div>
+        <div class="form-group">
+          <label>Selected Service</label>
+          <input type="text" id="f-service" readonly style="color: var(--brand); font-weight: bold; background: var(--dark);">
+        </div>
+        <button class="form-submit" onclick="alert('Request received! Our local agent will call you shortly.')">📡 Request Call Back</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ═══════════════════════════════ CONTACT PAGE ═══════════════════════════════ -->
 <div class="page" id="page-contact">
   <div class="contact-layout">
@@ -897,7 +1009,7 @@
   </div>
   <div class="footer-bottom">
     <span>© 2024 Service bench | Dish Connection. All Rights Reserved.</span>
-    <span>Made with ❤️ From Talntwings Private Limited</span>
+    <span>Made with ❤️ From <a href="https://api.whatsapp.com/send?phone=+919032504077&text=need%20website%20of" target="_blank" style="color: var(--brand); font-weight: 700; text-decoration: none;">Talntwings Private Limited</a></span>
   </div>
 </footer>
 
@@ -940,6 +1052,59 @@
       document.getElementById('nav-services').classList.add('active');
     });
   });
+
+  // 1. City Arrays
+const tsCities = ["Adilabad", "Bhadrachalam", "Hyderabad", "Jagtial", "Karimnagar", "Khammam", "Kothagudem", "Mahbubnagar", "Miryalaguda", "Nalgonda", "Nizamabad", "Ramagundam", "Siddipet", "Suryapet", "Warangal"];
+const apCities = ["Anantapur", "Eluru", "Guntur", "Kadapa", "Kakinada", "Kurnool", "Machilipatnam", "Nandyal", "Nellore", "Ongole", "Rajahmundry", "Tirupati", "Vijayawada", "Visakhapatnam", "Vizianagaram"];
+
+// 2. Build the Fixed Box Lists
+function buildAreaLists() {
+  document.querySelectorAll('.ts-list-container').forEach(container => {
+    tsCities.forEach(city => {
+      container.innerHTML += `
+        <li><a onclick="loadLocation('${city}', 'airtel')">Airtel DTH New Connection in ${city}</a></li>
+        <li><a onclick="loadLocation('${city}', 'tata')">Tata Sky New Connection in ${city}</a></li>
+      `;
+    });
+  });
+
+  document.querySelectorAll('.ap-list-container').forEach(container => {
+    apCities.forEach(city => {
+      container.innerHTML += `
+        <li><a onclick="loadLocation('${city}', 'airtel')">Airtel DTH New Connection in ${city}</a></li>
+        <li><a onclick="loadLocation('${city}', 'tata')">Tata Sky New Connection in ${city}</a></li>
+      `;
+    });
+  });
+}
+
+// 3. Routing Logic (Hide the other brand's card, show the clicked one)
+function loadLocation(city, brand) {
+  const brandName = brand === 'airtel' ? 'Airtel DTH' : 'Tata Play';
+  
+  // Update Title
+  document.getElementById('dyn-loc-title').innerHTML = `${brandName} in <span class="accent">${city}</span>`;
+  
+  // Hide both cards first
+  document.getElementById('card-airtel').style.display = 'none';
+  document.getElementById('card-tata').style.display = 'none';
+  
+  // Show only the clicked brand
+  if (brand === 'airtel') {
+    document.getElementById('card-airtel').style.display = 'block';
+    document.getElementById('dyn-airtel-title').innerText = `Airtel HD in ${city}`;
+  } else {
+    document.getElementById('card-tata').style.display = 'block';
+    document.getElementById('dyn-tata-title').innerText = `Tata Play HD in ${city}`;
+  }
+
+  showPage('location');
+}
+
+// Run the builder
+buildAreaLists();
 </script>
+
+
 </body>
 </html>
