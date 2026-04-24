@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> Service bench | Dish Connection | Airtel · Tata Play · Sun Direct</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brand: #e8000d;
+    --brand2: #ff6600;
+    --dark: #0d0d1a;
+    --darker: #07070f;
+    --card: #14142a;
+    --border: rgba(255,255,255,0.08);
+    --text: #e8e8f0;
+    --muted: #8888aa;
+    --gold: #f5c518;
+    --airtel: #e8000d;
+    --tata: #0066cc;
+    --sun: #ff8c00;
+    --green: #00c96e;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--darker);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── TOP BAR ── */
+  .top-bar {
+    background: var(--dark);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .top-bar a { color: var(--gold); text-decoration: none; margin-left: 16px; }
+  .top-bar a:hover { color: #fff; }
+  .top-bar .contacts { display: flex; gap: 24px; align-items: center; }
+  .top-bar .contact-item { display: flex; align-items: center; gap: 6px; }
+  .top-bar .contact-item span { font-size: 16px; }
+
+  /* ── NAVBAR ── */
+  nav {
+    background: var(--dark);
+    border-bottom: 2px solid var(--brand);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 30px rgba(232,0,13,0.15);
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 0;
+    cursor: pointer;
+  }
+  .logo-icon {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, var(--brand), var(--brand2));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .logo-text { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700; line-height: 1.1; }
+  .logo-text span { color: var(--brand); }
+  .logo-text small { display: block; font-size: 11px; color: var(--muted); font-weight: 400; letter-spacing: 2px; text-transform: uppercase; }
+
+  .nav-links { display: flex; align-items: center; gap: 4px; }
+  .nav-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--text); font-family: 'Nunito', sans-serif;
+    font-size: 15px; font-weight: 600;
+    padding: 20px 18px;
+    position: relative;
+    transition: color 0.2s;
+    letter-spacing: 0.3px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .nav-btn::after {
+    content: '';
+    position: absolute; bottom: 0; left: 50%; right: 50%;
+    height: 2px; background: var(--brand);
+    transition: left 0.3s, right 0.3s;
+  }
+  .nav-btn:hover, .nav-btn.active { color: #fff; }
+  .nav-btn:hover::after, .nav-btn.active::after { left: 0; right: 0; }
+
+  /* Dropdown */
+  .dropdown { position: relative; }
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--dark);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--brand);
+    border-radius: 0 0 12px 12px;
+    min-width: 220px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    z-index: 999;
+  }
+  .dropdown:hover .dropdown-menu { display: block; }
+  .dropdown-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 13px 20px;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+  .dropdown-item:last-child { border-bottom: none; }
+  .dropdown-item:hover { background: rgba(232,0,13,0.1); color: var(--brand); }
+  .dropdown-item .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .dot-airtel { background: var(--airtel); }
+  .dot-tata { background: var(--tata); }
+  .dot-sun { background: var(--sun); }
+  .arrow { font-size: 10px; transition: transform 0.3s; }
+  .dropdown:hover .arrow { transform: rotate(180deg); }
+
+  /* ── PAGES ── */
+  .page { display: none; animation: fadeUp 0.4s ease; }
+  .page.active { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 520px;
+    display: flex; align-items: center;
+    overflow: hidden;
+    padding: 80px 40px;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(232,0,13,0.18) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(255,102,0,0.12) 0%, transparent 50%),
+                linear-gradient(135deg, #07070f 0%, #0d0d1a 100%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-content { position: relative; max-width: 620px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(232,0,13,0.15); border: 1px solid rgba(232,0,13,0.3);
+    padding: 6px 16px; border-radius: 30px;
+    font-size: 12px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--brand);
+    margin-bottom: 20px;
+  }
+  .hero-badge::before { content: '●'; animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:0.3 } }
+  .hero h1 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(38px, 5vw, 64px);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .hero h1 .accent { color: var(--brand); }
+  .hero p { font-size: 17px; color: var(--muted); line-height: 1.7; margin-bottom: 32px; max-width: 500px; }
+  .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--brand), var(--brand2));
+    color: #fff; border: none; padding: 14px 30px;
+    border-radius: 8px; font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+    font-family: 'Nunito', sans-serif; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+    box-shadow: 0 6px 24px rgba(232,0,13,0.35);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(232,0,13,0.45); }
+  .btn-outline {
+    background: transparent; border: 1.5px solid var(--border);
+    color: var(--text); padding: 14px 30px;
+    border-radius: 8px; font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: border-color 0.2s, color 0.2s;
+    font-family: 'Nunito', sans-serif;
+  }
+  .btn-outline:hover { border-color: var(--brand); color: var(--brand); }
+  .hero-stats {
+    position: absolute; right: 40px; bottom: 40px;
+    display: flex; gap: 32px;
+  }
+  .stat { text-align: center; }
+  .stat-num { font-family: 'Rajdhani', sans-serif; font-size: 36px; font-weight: 700; color: var(--brand); line-height: 1; }
+  .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+
+  /* ── SECTIONS ── */
+  section { padding: 70px 40px; }
+  .section-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(28px, 3vw, 42px);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .section-title .accent { color: var(--brand); }
+  .section-sub { color: var(--muted); font-size: 15px; margin-bottom: 48px; }
+  .section-header { margin-bottom: 48px; }
+  .divider { width: 60px; height: 3px; background: linear-gradient(90deg, var(--brand), var(--brand2)); border-radius: 2px; margin: 12px 0 16px; }
+
+  /* ── PROVIDER CARDS ── */
+  .provider-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+  .provider-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .provider-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .provider-card.airtel::before { background: var(--airtel); }
+  .provider-card.tata::before { background: var(--tata); }
+  .provider-card.sun::before { background: var(--sun); }
+  .provider-card:hover { transform: translateY(-6px); }
+  .provider-card.airtel:hover { border-color: var(--airtel); box-shadow: 0 20px 40px rgba(232,0,13,0.2); }
+  .provider-card.tata:hover { border-color: var(--tata); box-shadow: 0 20px 40px rgba(0,102,204,0.2); }
+  .provider-card.sun:hover { border-color: var(--sun); box-shadow: 0 20px 40px rgba(255,140,0,0.2); }
+  .provider-logo {
+    width: 56px; height: 56px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; margin-bottom: 16px;
+  }
+  .provider-logo.airtel { background: rgba(232,0,13,0.15); }
+  .provider-logo.tata { background: rgba(0,102,204,0.15); }
+  .provider-logo.sun { background: rgba(255,140,0,0.15); }
+  .provider-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+  .provider-card p { color: var(--muted); font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
+  .price-tag {
+    display: flex; align-items: baseline; gap: 6px;
+    margin-bottom: 20px;
+  }
+  .price-tag .amount { font-family: 'Rajdhani', sans-serif; font-size: 32px; font-weight: 700; }
+  .price-tag .from { font-size: 12px; color: var(--muted); }
+  .provider-card.airtel .amount { color: var(--airtel); }
+  .provider-card.tata .amount { color: var(--tata); }
+  .provider-card.sun .amount { color: var(--sun); }
+  .features { list-style: none; margin-bottom: 24px; }
+  .features li { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); padding: 4px 0; }
+  .features li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+  .card-btn {
+    width: 100%; padding: 11px; border-radius: 8px; border: none;
+    font-weight: 700; font-size: 14px; cursor: pointer;
+    font-family: 'Nunito', sans-serif; transition: opacity 0.2s, transform 0.2s;
+  }
+  .card-btn:hover { opacity: 0.88; transform: scale(0.98); }
+  .provider-card.airtel .card-btn { background: var(--airtel); color: #fff; }
+  .provider-card.tata .card-btn { background: var(--tata); color: #fff; }
+  .provider-card.sun .card-btn { background: var(--sun); color: #fff; }
+
+  /* ── WHY US ── */
+  .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+  .why-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 28px 24px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .why-card:hover { border-color: rgba(232,0,13,0.3); transform: translateY(-3px); }
+  .why-icon { font-size: 32px; margin-bottom: 14px; }
+  .why-card h4 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+  .why-card p { color: var(--muted); font-size: 13px; line-height: 1.6; }
+
+  /* ── SERVICE PAGE ── */
+  .service-hero {
+    background: linear-gradient(135deg, var(--dark) 0%, var(--card) 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 40px;
+    text-align: center;
+  }
+  .service-hero h1 { font-family: 'Rajdhani', sans-serif; font-size: 48px; font-weight: 700; }
+  .service-hero p { color: var(--muted); font-size: 17px; margin-top: 12px; }
+
+  .plans-section { padding: 60px 40px; }
+  .plans-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+  .plan-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 24px; transition: transform 0.25s, border-color 0.25s;
+  }
+  .plan-card:hover { transform: translateY(-4px); border-color: rgba(232,0,13,0.3); }
+  .plan-badge {
+    display: inline-block; padding: 3px 10px; border-radius: 20px;
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 14px;
+  }
+  .plan-badge.hd { background: rgba(232,0,13,0.2); color: var(--airtel); }
+  .plan-badge.\4k  { background: rgba(245,197,24,0.2); color: var(--gold); }
+  .plan-badge.standard { background: rgba(0,201,110,0.2); color: var(--green); }
+  .plan-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .plan-card .price { font-family: 'Rajdhani', sans-serif; font-size: 28px; font-weight: 700; color: var(--brand); margin: 10px 0; }
+  .plan-card .price small { font-size: 14px; color: var(--muted); font-weight: 400; font-family: 'Nunito', sans-serif; }
+  .plan-card p { color: var(--muted); font-size: 13px; line-height: 1.6; }
+  .plan-cta { margin-top: 18px; display: flex; gap: 10px; }
+  .plan-cta a {
+    flex: 1; text-align: center; padding: 10px;
+    border-radius: 7px; font-size: 13px; font-weight: 700;
+    text-decoration: none; transition: opacity 0.2s;
+  }
+  .plan-cta a:hover { opacity: 0.82; }
+  .plan-cta .call { background: var(--brand); color: #fff; }
+  .plan-cta .wa { background: #25d366; color: #fff; }
+
+  .provider-tab-bar {
+    display: flex; gap: 12px;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+  }
+  .provider-tab {
+    padding: 10px 24px; border-radius: 8px; border: 1.5px solid var(--border);
+    font-weight: 700; font-size: 14px; cursor: pointer; transition: all 0.2s;
+    background: var(--card); color: var(--text);
+    font-family: 'Nunito', sans-serif;
+  }
+  .provider-tab:hover { border-color: var(--brand); color: var(--brand); }
+  .provider-tab.active-tab { background: var(--brand); border-color: var(--brand); color: #fff; }
+  .provider-section { display: none; }
+  .provider-section.visible { display: block; animation: fadeUp 0.3s ease; }
+
+  /* ── CONTACT PAGE ── */
+  .contact-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 48px;
+    padding: 60px 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .contact-info h2 { font-family: 'Rajdhani', sans-serif; font-size: 36px; font-weight: 700; margin-bottom: 8px; }
+  .contact-info .divider { margin-bottom: 20px; }
+  .contact-info p { color: var(--muted); line-height: 1.7; margin-bottom: 32px; }
+  .contact-item {
+    display: flex; gap: 16px; align-items: flex-start;
+    margin-bottom: 24px;
+  }
+  .contact-icon {
+    width: 46px; height: 46px; border-radius: 12px;
+    background: rgba(232,0,13,0.12); border: 1px solid rgba(232,0,13,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .contact-detail strong { display: block; font-size: 15px; font-weight: 700; margin-bottom: 3px; }
+  .contact-detail span, .contact-detail a { color: var(--muted); font-size: 14px; text-decoration: none; }
+  .contact-detail a:hover { color: var(--brand); }
+
+  .contact-form-box {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 36px;
+  }
+  .contact-form-box h3 { font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700; margin-bottom: 24px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { margin-bottom: 18px; }
+  .form-group label { display: block; font-size: 13px; font-weight: 700; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.5px; text-transform: uppercase; }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; background: var(--darker); border: 1.5px solid var(--border);
+    border-radius: 8px; padding: 12px 14px;
+    color: var(--text); font-family: 'Nunito', sans-serif; font-size: 14px;
+    transition: border-color 0.2s; outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--brand);
+  }
+  .form-group select option { background: var(--dark); }
+  .form-group textarea { resize: vertical; min-height: 110px; }
+  .form-submit {
+    width: 100%;
+    background: linear-gradient(135deg, var(--brand), var(--brand2));
+    color: #fff; border: none; padding: 15px;
+    border-radius: 8px; font-size: 16px; font-weight: 700;
+    cursor: pointer; font-family: 'Nunito', sans-serif;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 6px 20px rgba(232,0,13,0.3);
+  }
+  .form-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(232,0,13,0.4); }
+  .success-msg {
+    display: none;
+    background: rgba(0,201,110,0.1); border: 1px solid rgba(0,201,110,0.3);
+    border-radius: 10px; padding: 16px; text-align: center;
+    color: var(--green); font-weight: 700; font-size: 15px;
+    margin-top: 16px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--dark);
+    border-top: 1px solid var(--border);
+    padding: 48px 40px 24px;
+  }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px; margin-bottom: 36px; }
+  .footer-brand p { color: var(--muted); font-size: 14px; line-height: 1.7; margin-top: 12px; max-width: 300px; }
+  footer h5 { font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--brand); margin-bottom: 16px; }
+  footer ul { list-style: none; }
+  footer ul li { margin-bottom: 10px; }
+  footer ul li a { color: var(--muted); text-decoration: none; font-size: 14px; transition: color 0.2s; }
+  footer ul li a:hover { color: #fff; }
+  .footer-bottom {
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px; color: var(--muted);
+  }
+  .footer-bottom a { color: var(--brand); text-decoration: none; }
+
+  /* ── FLOATING WA ── */
+  .floating-wa {
+    position: fixed; bottom: 28px; right: 28px; z-index: 999;
+    width: 56px; height: 56px; border-radius: 50%;
+    background: #25d366;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; box-shadow: 0 6px 24px rgba(37,211,102,0.4);
+    cursor: pointer; text-decoration: none;
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .top-bar { padding: 8px 20px; font-size: 12px; }
+    nav { padding: 0 20px; }
+    .logo-text { font-size: 18px; }
+    .hero { padding: 60px 20px; }
+    .hero-stats { display: none; }
+    section { padding: 50px 20px; }
+    .contact-layout { grid-template-columns: 1fr; padding: 40px 20px; }
+    .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+    .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+    .form-row { grid-template-columns: 1fr; }
+    .plans-section { padding: 40px 20px; }
+    .provider-tab-bar { gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <span>📡 India's Trusted DTH Service Provider | Pan-India Coverage</span>
+  <div class="contacts">
+    <div class="contact-item"><span>💬</span> <a href="https://api.whatsapp.com/send?phone=+917780647302">+91 7780647302</a></div>
+    <div class="contact-item"><span>📞</span> <a href="tel:7780647302">+91 7780647302</a></div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo" onclick="showPage('home')">
+    <div class="logo-icon">📡</div>
+    <div class="logo-text">
+      Service Bench <span>Dish Connection</span>
+      <small>New Connection Specialists</small>
+    </div>
+  </div>
+  <div class="nav-links">
+    <button class="nav-btn active" onclick="showPage('home')" id="nav-home">🏠 Home</button>
+
+    <div class="dropdown">
+      <button class="nav-btn" id="nav-services" onclick="showPage('services')">
+        📺 Services <span class="arrow">▾</span>
+      </button>
+      <div class="dropdown-menu">
+        <div class="dropdown-item" onclick="showPage('services'); setProvider('airtel')">
+          <span class="dot dot-airtel"></span> Airtel DTH
+        </div>
+        <div class="dropdown-item" onclick="showPage('services'); setProvider('tata')">
+          <span class="dot dot-tata"></span> Tata Play (TataSky)
+        </div>
+        <div class="dropdown-item" onclick="showPage('services'); setProvider('sun')">
+          <span class="dot dot-sun"></span> Sun Direct
+        </div>
+      </div>
+    </div>
+
+    <button class="nav-btn" id="nav-contact" onclick="showPage('contact')">✉️ Contact Us</button>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════ HOME PAGE ═══════════════════════════════ -->
+<div class="page active" id="page-home">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-badge">● Live & Active Service</div>
+      <h1>Your #1 <span class="accent">DTH Connection</span><br>Partner in India</h1>
+      <p>Get new DTH connections for Airtel, Tata Play, and Sun Direct at the best prices. Fast installation within 4–6 hours. Serving 5000+ happy customers every month.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="showPage('services')">📺 Get New Connection</button>
+        <button class="btn-outline" onclick="showPage('contact')">📞 Call Us Now</button>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">5000+</div><div class="stat-label">Monthly Connections</div></div>
+      <div class="stat"><div class="stat-num">10+</div><div class="stat-label">Years Experience</div></div>
+      <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Customer Support</div></div>
+    </div>
+  </div>
+
+  <!-- PROVIDERS -->
+  <section style="background: var(--dark);">
+    <div class="section-header">
+      <div class="section-title">Our <span class="accent">DTH Providers</span></div>
+      <div class="divider"></div>
+      <p class="section-sub">Choose from India's top DTH brands — all at guaranteed best prices</p>
+    </div>
+    <div class="provider-grid">
+      <!-- AIRTEL -->
+      <div class="provider-card airtel" onclick="showPage('services'); setProvider('airtel')">
+        <div class="provider-logo airtel">📡</div>
+        <h3>Airtel DTH</h3>
+        <p>Enjoy crystal-clear HD and 4K Xstream content with Airtel's vast channel lineup and superfast installation.</p>
+        <div class="price-tag">
+          <span class="from">Starting</span>
+          <span class="amount">₹1,900</span>
+          <span class="from">+ pack cost</span>
+        </div>
+        <ul class="features">
+          <li>HD & 4K Xstream Box available</li>
+          <li>1 Week pack included</li>
+          <li>1 Month Apps free (4K plans)</li>
+          <li>Super-fast installation</li>
+        </ul>
+        <button class="card-btn">Get Airtel DTH →</button>
+      </div>
+      <!-- TATA -->
+      <div class="provider-card tata" onclick="showPage('services'); setProvider('tata')">
+        <div class="provider-logo tata">🛰️</div>
+        <h3>Tata Play</h3>
+        <p>India's most trusted DTH brand. Get Tata Play or the 4K Binge box with premium OTT apps included.</p>
+        <div class="price-tag">
+          <span class="from">Starting</span>
+          <span class="amount">₹1,900</span>
+          <span class="from">+ pack cost</span>
+        </div>
+        <ul class="features">
+          <li>HD & 4K Binge Box options</li>
+          <li>1 Month HD Hindi Basic pack</li>
+          <li>6 Months OTT App access</li>
+          <li>Quick installation guaranteed</li>
+        </ul>
+        <button class="card-btn">Get Tata Play →</button>
+      </div>
+      <!-- SUN -->
+      <div class="provider-card sun" onclick="showPage('services'); setProvider('sun')">
+        <div class="provider-logo sun">☀️</div>
+        <h3>Sun Direct</h3>
+        <p>Best DTH for South Indian channels. Affordable packages with HD quality for all your favorite regional content.</p>
+        <div class="price-tag">
+          <span class="from">Starting at</span>
+          <span class="amount">Affordable</span>
+        </div>
+        <ul class="features">
+          <li>HD & Standard boxes</li>
+          <li>7-Day recharge pack included</li>
+          <li>Best South Indian coverage</li>
+          <li>Budget-friendly plans</li>
+        </ul>
+        <button class="card-btn">Get Sun Direct →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section>
+    <div class="section-header">
+      <div class="section-title">Why Choose <span class="accent">Us?</span></div>
+      <div class="divider"></div>
+      <p class="section-sub">We've been India's trusted DTH partner for over a decade</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card"><div class="why-icon">⚡</div><h4>Same Day Installation</h4><p>Get your DTH installed within 4–6 hours of booking. No long waits.</p></div>
+      <div class="why-card"><div class="why-icon">💰</div><h4>Best Price Guarantee</h4><p>We offer the lowest possible prices on all DTH connections across providers.</p></div>
+      <div class="why-card"><div class="why-icon">🛡️</div><h4>After-Sales Support</h4><p>Our team is available 24×7 for technical support and service queries.</p></div>
+      <div class="why-card"><div class="why-icon">🏆</div><h4>5000+ Monthly Orders</h4><p>Trusted by thousands of customers across India every single month.</p></div>
+      <div class="why-card"><div class="why-icon">🌍</div><h4>Pan-India Coverage</h4><p>Serving all major Indian states and cities — from metros to small towns.</p></div>
+      <div class="why-card"><div class="why-icon">📦</div><h4>All Providers, One Place</h4><p>Compare and get Airtel, Tata Play, or Sun Direct — we handle everything.</p></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section style="background: var(--dark);">
+    <div style="max-width: 820px;">
+      <div class="section-title">About <span class="accent">Service bench | Dish Connection</span></div>
+      <div class="divider"></div>
+      <p style="color:var(--muted); line-height:1.9; font-size:15px; margin-bottom:16px;">
+        Service bench | Dish Connection is a one-stop platform for all your DTH needs in India. We provide new connections for Airtel Digital TV, Tata Play, and Sun Direct DTH across all Indian states and cities. What started as a small operation has grown into a market-leading service trusted by more than 5,000 customers every month.
+      </p>
+      <p style="color:var(--muted); line-height:1.9; font-size:15px;">
+        Our goal is simple — deliver the best value, the fastest installation, and stress-free after-sales support. Our experienced team and dedicated 24×7 customer service ensure you're never left without help when you need it. Service bench | Dish Connection is Hyderabad-based and serves customers across India.
+      </p>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════════════════════ SERVICES PAGE ═══════════════════════════════ -->
+<div class="page" id="page-services">
+  <div class="service-hero">
+    <h1>Our <span style="color:var(--brand)">DTH Services</span></h1>
+    <p>Explore connection plans for Airtel, Tata Play, and Sun Direct</p>
+  </div>
+
+  <div class="plans-section">
+    <div class="provider-tab-bar">
+      <button class="provider-tab active-tab" onclick="setProvider('airtel')" id="tab-airtel">📡 Airtel DTH</button>
+      <button class="provider-tab" onclick="setProvider('tata')" id="tab-tata">🛰️ Tata Play</button>
+      <button class="provider-tab" onclick="setProvider('sun')" id="tab-sun">☀️ Sun Direct</button>
+    </div>
+
+    <!-- AIRTEL -->
+    <div class="provider-section visible" id="sec-airtel">
+      <div class="section-title" style="margin-bottom:6px;">Airtel <span class="accent">DTH</span> Plans</div>
+      <div class="divider"></div>
+      <p class="section-sub">High-definition viewing with Airtel's extensive channel network</p>
+      <div class="plans-grid">
+        <div class="plan-card">
+          <span class="plan-badge hd">HD</span>
+          <h3>Airtel DTH Standard HD</h3>
+          <div class="price">₹1,900 <small>+ recharge pack</small></div>
+          <p>Airtel Xstream HD Set Top Box with 1 Month FTA Pack. Super fast installation included.</p>
+          <div class="plan-cta">
+            <a href="tel:8639565619" class="call">📞 Call Now</a>
+            <a href="https://api.whatsapp.com/send?phone=+918639565619" class="wa">💬 WhatsApp</a>
+          </div>
+        </div>
+        <div class="plan-card">
+          <span class="plan-badge 4k">4K</span>
+          <h3>Airtel DTH 4K Xstream</h3>
+          <div class="price">Premium <small>call for price</small></div>
+          <p>Airtel DTH 4K Xstream Box with 1 week pack + 1 month Apps absolutely free.</p>
+          <div class="plan-cta">
+            <a href="tel:8639565619" class="call">📞 Call Now</a>
+            <a href="https://api.whatsapp.com/send?phone=+918639565619" class="wa">💬 WhatsApp</a>
+          </div>
+        </div>
+        <div class="plan-card">
+          <span class="plan-badge standard">Bundle</span>
+          <h3>Airtel DTH Custom Pack</h3>
+          <div class="price">Custom <small>as per requirement</small></div>
+          <p>Choose your own channel pack with Airtel's flexible bundling options for South, Hindi & English content.</p>
+          <div class="plan-cta">
+            <a href="tel:8639565619" class="call">📞 Call Now</a>
+            <a href="https://api.whatsapp.com/send?phone=+918639565619" class="wa">💬 WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TATA -->
+    <div class="provider-section" id="sec-tata">
+      <div class="section-title" style="margin-bottom:6px;">Tata Play <span class="accent">(TataSky)</span> Plans</div>
+      <div class="divider"></div>
+      <p class="section-sub">India's most trusted DTH brand with 4K Binge OTT integration</p>
+      <div class="plans-grid">
+        <div class="plan-card">
+          <span class="plan-badge hd">HD</span>
+          <h3>Tata Play HD Connection</h3>
+          <div class="price">₹1,900 <small>+ recharge pack</small></div>
+          <p>Tata Sky HD Set Top Box with 1 Month HD Hindi Basic Pack + professional installation included.</p>
+          <div class="plan-cta">
+            <a href="tel:8639565619" class="call">📞 Call Now</a>
+            <a href="https://api.whatsapp.com/send?phone=+918639565619" class="wa">💬 WhatsApp</a>
+          </div>
+        </div>
+        <div class="plan-card">
+          <span class="plan-badge 4k">4K Binge</span>
+          <h3>Tata Play 4K Binge</h3>
+          <div class="price">Premium <small>call for price</small></div>
+          <p>Tata Play 4K Binge Box with 1 month pack + 6 months OTT App access absolutely free.</p>
+          <div class="plan-cta">
+            <a href="tel:8639565619" class="call">📞 Call Now</a>
+            <a href="https://api.whatsapp.com/send?phone=+918639565619" class="wa">💬 WhatsApp</a>
+          </div>
+        </div>
+        <div class="plan-card">
+          <span class="plan-badge standard">Yearly</span>
+          <h3>Tata Play Annual Plan</h3>
+          <div class="price">Custom <small>best discounts</small></div>
+          <p>Avail incredible offers and discounts on 1-month, 6-month, and yearly subscription bundles.</p>
+          <div class="plan-cta">
+            <a href="tel:8639565619" class="call">📞 Call Now</a>
+            <a href="https://api.whatsapp.com/send?phone=+918639565619" class="wa">💬 WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUN -->
+    <div class="provider-section" id="sec-sun">
+      <div class="section-title" style="margin-bottom:6px;">Sun Direct <span class="accent">Plans</span></div>
+      <div class="divider"></div>
+      <p class="section-sub">Best South Indian channel coverage at the most affordable prices</p>
+      <div class="plans-grid">
+        <div class="plan-card">
+          <span class="plan-badge standard">Standard</span>
+          <h3>Sun Direct New Connection</h3>
+          <div class="price">Affordable <small>call for price</small></div>
+          <p>Sun Direct New Connection at affordable prices. Ideal for South Indian regional content lovers.</p>
+          <div class="plan-cta">
+            <a href="tel:8639565619" class="call">📞 Call Now</a>
+            <a href="https://api.whatsapp.com/send?phone=+918639565619" class="wa">💬 WhatsApp</a>
+          </div>
+        </div>
+        <div class="plan-card">
+          <span class="plan-badge hd">HD</span>
+          <h3>Sun Direct HD Connection</h3>
+          <div class="price">Best Price <small>call for price</small></div>
+          <p>Sun Direct HD New Connection with 7-day recharge pack included. High-definition South Indian viewing.</p>
+          <div class="plan-cta">
+            <a href="tel:8639565619" class="call">📞 Call Now</a>
+            <a href="https://api.whatsapp.com/send?phone=+918639565619" class="wa">💬 WhatsApp</a>
+          </div>
+        </div>
+        <div class="plan-card">
+          <span class="plan-badge 4k">Bundle</span>
+          <h3>Sun Direct Annual Pack</h3>
+          <div class="price">Custom <small>best discounts</small></div>
+          <p>Choose your preferred duration — 1 month, 6 months, or yearly — and save more with Sun Direct bundles.</p>
+          <div class="plan-cta">
+            <a href="tel:8639565619" class="call">📞 Call Now</a>
+            <a href="https://api.whatsapp.com/send?phone=+918639565619" class="wa">💬 WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHY DTH -->
+  <section style="background: var(--dark);">
+    <div class="section-title">Why <span class="accent">DTH over Cable TV?</span></div>
+    <div class="divider"></div>
+    <div class="why-grid" style="margin-top:32px;">
+      <div class="why-card"><div class="why-icon">📺</div><h4>High Definition Picture</h4><p>DTH delivers crystal-clear HD and 4K picture quality unlike traditional cable TV.</p></div>
+      <div class="why-card"><div class="why-icon">💸</div><h4>More Affordable</h4><p>DTH is cheaper than cable TV in the long run with transparent pricing and no hidden fees.</p></div>
+      <div class="why-card"><div class="why-icon">🎵</div><h4>Better Audio</h4><p>Enjoy superior Dolby Digital audio with DTH for a true cinema-at-home experience.</p></div>
+      <div class="why-card"><div class="why-icon">🌧️</div><h4>No Local Outages</h4><p>DTH signal comes directly from satellite — no local cable cuts or maintenance disruptions.</p></div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════════════════════ CONTACT PAGE ═══════════════════════════════ -->
+<div class="page" id="page-contact">
+  <div class="contact-layout">
+    <div class="contact-info">
+      <h2>Get in <span style="color:var(--brand)">Touch</span></h2>
+      <div class="divider"></div>
+      <p>Ready to get your new DTH connection? Reach out to us via call, WhatsApp, or fill in the form. We'll get back to you lightning fast!</p>
+
+      <div class="contact-item">
+        <div class="contact-icon">📍</div>
+        <div class="contact-detail">
+          <strong>Our Address</strong>
+          <span>H. No. 3-8-14, Highway Colony, Chintal Kunta,<br>LB Nagar, Hyderabad – 500074</span>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">💬</div>
+        <div class="contact-detail">
+          <strong>WhatsApp</strong>
+          <a href="https://api.whatsapp.com/send?phone=+917780647302">+91 7780647302</a>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📞</div>
+        <div class="contact-detail">
+          <strong>Phone</strong>
+          <a href="tel:7780647302">+91 7780647302</a>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">🕐</div>
+        <div class="contact-detail">
+          <strong>Working Hours</strong>
+          <span>Mon – Sun: 8:00 AM – 9:00 PM<br>Customer Support: 24×7</span>
+        </div>
+      </div>
+
+      <div style="margin-top:32px; padding:20px; background:var(--card); border-radius:12px; border:1px solid var(--border);">
+        <p style="font-size:13px; color:var(--muted); margin-bottom:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px;">Quick Connect</p>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <a href="tel:7780647302" class="btn-primary" style="font-size:14px; padding:12px 20px;">📞 Call Now</a>
+          <a href="https://api.whatsapp.com/send?phone=+917780647302" style="background:#25d366; color:#fff; border:none; padding:12px 20px; border-radius:8px; font-size:14px; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">💬 WhatsApp</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-form-box">
+      <h3>Book a <span style="color:var(--brand)">New Connection</span></h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="f-name" placeholder="Your name">
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="f-phone" placeholder="+91 XXXXX XXXXX">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="f-email" placeholder="you@email.com">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>DTH Provider</label>
+          <select id="f-provider">
+            <option value="">-- Select Provider --</option>
+            <option>Airtel DTH</option>
+            <option>Tata Play (TataSky)</option>
+            <option>Sun Direct</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Connection Type</label>
+          <select id="f-type">
+            <option value="">-- Select Type --</option>
+            <option>Standard HD</option>
+            <option>4K / Ultra HD</option>
+            <option>Binge / OTT Bundle</option>
+            <option>Annual Plan</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Your Address / City</label>
+        <input type="text" id="f-address" placeholder="City, State">
+      </div>
+      <div class="form-group">
+        <label>Message (Optional)</label>
+        <textarea id="f-message" placeholder="Any specific requirement or question..."></textarea>
+      </div>
+      <button class="form-submit" onclick="submitForm()">📡 Submit Booking Request</button>
+      <div class="success-msg" id="success-msg">✅ Thank you! We'll contact you within 30 minutes to confirm your booking.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo" style="padding:0; margin-bottom:12px;">
+        <div class="logo-icon">📡</div>
+        <div class="logo-text">Service Bench <span>Dish Connection</span><small>New Connection Specialists</small></div>
+      </div>
+      <p>India's trusted DTH connection provider. Serving 5000+ customers every month across all states. One stop solution for Airtel, Tata Play & Sun Direct connections.</p>
+    </div>
+    <div>
+      <h5>Quick Links</h5>
+      <ul>
+        <li><a href="#" onclick="showPage('home')">Home</a></li>
+        <li><a href="#" onclick="showPage('services'); setProvider('airtel')">Airtel DTH</a></li>
+        <li><a href="#" onclick="showPage('services'); setProvider('tata')">Tata Play</a></li>
+        <li><a href="#" onclick="showPage('services'); setProvider('sun')">Sun Direct</a></li>
+        <li><a href="#" onclick="showPage('contact')">Contact Us</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="tel:7780647302">📞 +91 7780647302</a></li>
+        <li><a href="https://api.whatsapp.com/send?phone=+917780647302">💬 +91 7780647302</a></li>
+        <li><a>📍 LB Nagar, Hyderabad 500074</a></li>
+        <li><a>🕐 Support: 24×7</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2024 Service bench | Dish Connection. All Rights Reserved.</span>
+    <span>Made with ❤️ From Talntwings Private Limited</span>
+  </div>
+</footer>
+
+<!-- Floating WhatsApp -->
+<a href="https://api.whatsapp.com/send?phone=+917780647302" class="floating-wa" target="_blank" title="WhatsApp Us">💬</a>
+
+<script>
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    document.getElementById('nav-' + name)?.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function setProvider(name) {
+    document.querySelectorAll('.provider-section').forEach(s => s.classList.remove('visible'));
+    document.querySelectorAll('.provider-tab').forEach(t => t.classList.remove('active-tab'));
+    document.getElementById('sec-' + name).classList.add('visible');
+    document.getElementById('tab-' + name).classList.add('active-tab');
+  }
+
+  function submitForm() {
+    const name = document.getElementById('f-name').value.trim();
+    const phone = document.getElementById('f-phone').value.trim();
+    if (!name || !phone) {
+      alert('Please enter your name and phone number to continue.');
+      return;
+    }
+    document.getElementById('success-msg').style.display = 'block';
+    ['f-name','f-phone','f-email','f-provider','f-type','f-address','f-message']
+      .forEach(id => { document.getElementById(id).value = ''; });
+    setTimeout(() => { document.getElementById('success-msg').style.display = 'none'; }, 6000);
+  }
+
+  // Set nav-services as active when services dropdown items clicked
+  document.querySelectorAll('.dropdown-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('nav-services').classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
